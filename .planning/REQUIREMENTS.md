@@ -3,9 +3,9 @@
 ## v1 Requirements
 
 ### Ambiente Local
-- [ ] **ENV-01**: Configurar .env.local com credenciais reais do Supabase (copiar do Vercel)
-- [ ] **BUILD-01**: npm run build completa sem erros
-- [ ] **DEV-01**: npm run dev serve a pagina corretamente em localhost:3000
+- [x] **ENV-01**: Configurar .env.local com credenciais reais do Supabase (copiar do Vercel) ✓ Complete
+- [x] **BUILD-01**: npm run build completa sem erros ✓ Complete
+- [x] **DEV-01**: npm run dev serve a pagina corretamente em localhost:3000 ✓ Complete
 
 ### Paridade com Producao
 - [ ] **PARITY-01**: Todas as secoes visiveis em producao estao renderizadas localmente

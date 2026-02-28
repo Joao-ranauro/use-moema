@@ -10,7 +10,7 @@
 **Plans:** 1 plan
 
 Plans:
-- [ ] 01-01-PLAN.md — Verify build and dev server (BUILD-01, DEV-01)
+- [x] 01-01-PLAN.md — Verify build and dev server (BUILD-01, DEV-01)
 
 **Success Criteria:**
 1. .env.local contem credenciais reais do Supabase (copiadas do Vercel)
