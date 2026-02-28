@@ -24,6 +24,12 @@ Plans:
 
 **Requirements:** PARITY-01, PARITY-02, LEADS-01
 
+**Plans:** 2 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — Verify section rendering and visual parity (PARITY-01, PARITY-02)
+- [ ] 02-02-PLAN.md — Test lead submission end-to-end (LEADS-01)
+
 **Success Criteria:**
 1. Todas as 6 secoes + header + footer renderizam corretamente em localhost
 2. Layout, imagens e animacoes correspondem visualmente ao site em producao
