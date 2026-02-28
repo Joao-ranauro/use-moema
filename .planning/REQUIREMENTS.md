@@ -8,15 +8,15 @@
 - [x] **DEV-01**: npm run dev serve a pagina corretamente em localhost:3000 ✓ Complete
 
 ### Paridade com Producao
-- [ ] **PARITY-01**: Todas as secoes visiveis em producao estao renderizadas localmente
-- [ ] **PARITY-02**: Visual local corresponde ao site em producao (layout, imagens, animacoes)
+- [x] **PARITY-01**: Todas as secoes visiveis em producao estao renderizadas localmente ✓ Complete
+- [x] **PARITY-02**: Visual local corresponde ao site em producao (layout, imagens, animacoes) ✓ Complete
 
 ### Deploy Pipeline
 - [ ] **DEPLOY-01**: Verificar que Vercel esta conectado ao repo joaoranauro1/use-moema
 - [ ] **DEPLOY-02**: Push para GitHub dispara deploy automatico no Vercel
 
 ### Funcionalidade
-- [ ] **LEADS-01**: Formulario de leads (InterestModal) funciona localmente — submissao chega no Supabase
+- [x] **LEADS-01**: Formulario de leads (InterestModal) funciona localmente — submissao chega no Supabase ✓ Complete
 
 ## v2 Requirements (Deferred)
 
