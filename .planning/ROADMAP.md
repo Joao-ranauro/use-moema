@@ -42,6 +42,11 @@ Plans:
 
 **Requirements:** DEPLOY-01, DEPLOY-02
 
+**Plans:** 1 plan
+
+Plans:
+- [ ] 03-01-PLAN.md — Verify GitHub connection and test push-to-deploy pipeline (DEPLOY-01, DEPLOY-02)
+
 **Success Criteria:**
 1. Vercel dashboard mostra conexao com repo joaoranauro1/use-moema branch master
 2. Um push de teste (ou verificacao do ultimo deploy) confirma auto-deploy funcionando
@@ -55,6 +60,6 @@ Plans:
 |---|-------|------|--------------|----------|
 | 1 | Configuracao do Ambiente | Build e dev funcionando | ENV-01, BUILD-01, DEV-01 | 3 |
 | 2 | Paridade e Funcionalidade | Local = Producao + leads | PARITY-01, PARITY-02, LEADS-01 | 3 |
-| 3 | Pipeline de Deploy | Push → Deploy automatico | DEPLOY-01, DEPLOY-02 | 3 |
+| 3 | Pipeline de Deploy | Push -> Deploy automatico | DEPLOY-01, DEPLOY-02 | 3 |
 
 **Total:** 3 fases | 8 requirements | Todas mapeadas
