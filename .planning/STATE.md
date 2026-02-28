@@ -2,9 +2,9 @@
 
 ## Current
 - **Phase:** 2 of 3 (Paridade e Funcionalidade)
-- **Plan:** 1 of N in phase (at checkpoint — awaiting human visual comparison approval)
-- **Status:** In progress — 02-01 at checkpoint:human-verify
-- **Last activity:** 2026-02-28 — Completed tasks 1+2 of 02-01-PLAN.md, paused at checkpoint
+- **Plan:** 1 of N in phase (complete)
+- **Status:** In progress — 02-01 complete (human approved visual parity)
+- **Last activity:** 2026-02-28 — Completed 02-01-PLAN.md (all 3 tasks including checkpoint approved)
 
 ## Progress
 █████░░░░░░░░░░░░░░░░░░░░░░░░░ ~33% (2/~6 plans estimated)
@@ -12,7 +12,7 @@
 | Phase | Status | Notes |
 |-------|--------|-------|
 | 1 — Configuracao do Ambiente | complete | Build passes, dev server verified, .env.local confirmed |
-| 2 — Paridade e Funcionalidade | in progress | 02-01 tasks done, at checkpoint; 02-02 complete |
+| 2 — Paridade e Funcionalidade | in progress | 02-01 complete (PARITY-01 + PARITY-02 confirmed); 02-02 complete |
 | 3 — Pipeline de Deploy | pending | |
 
 ## Accumulated Decisions
@@ -24,6 +24,7 @@
 | LEADS-01 pipeline is fully functional | 02-02 | POST /api/leads -> Supabase insert verified end-to-end; budget labels correctly mapped |
 | No code changes needed in 02-02 | 02-02 | Verification-only plan; lead capture pipeline works as-is |
 | PARITY-01 confirmed: all 6 sections + header + footer render in localhost | 02-01 | HTTP 200, all section anchors found in SSR HTML, no error markers |
+| PARITY-02 confirmed: visual parity human-approved | 02-01 | Human reviewed full-page screenshots of local vs production — structurally identical |
 | ContactSection and ArchitectureSection intentionally absent from page.tsx | 02-01 | ROADMAP v2-deferred scope; matches production (6 sections) |
 
 ## Context
@@ -34,11 +35,12 @@
 - Build e dev server verificados e funcionais
 - Lead capture pipeline (InterestModal -> /api/leads -> Supabase) verified working
 - PARITY-01 verified: all 6 sections + header + footer render in localhost
+- PARITY-02 verified (human-approved): local screenshots match production visually
 - Screenshots captured: screenshots/full-page.png (local) and screenshots/production-full.png (production)
 
 ## Session Continuity
-- **Last session:** 2026-02-28T02:00:36Z
-- **Stopped at:** 02-01-PLAN.md checkpoint:human-verify (tasks 1+2 complete, awaiting visual parity approval)
+- **Last session:** 2026-02-28T02:01:00Z
+- **Stopped at:** Completed 02-01-PLAN.md (all 3 tasks done, checkpoint approved)
 - **Resume file:** None
 
 ---
