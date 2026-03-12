@@ -5,6 +5,9 @@ import { supabase } from "@/lib/supabase";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
+
 /* ─── Budget value → readable label ─── */
 const BUDGET_LABELS: Record<string, string> = {
   "ate-500k": "Até R$ 500 mil",
@@ -12,6 +15,23 @@ const BUDGET_LABELS: Record<string, string> = {
   "1m-1.5m": "R$ 1 milhão a R$ 1,5 milhão",
   "acima-1.5m": "Acima de R$ 1,5 milhão",
 };
+
+/* ─── Telegram notification ─── */
+async function notifyTelegram(text: string) {
+  if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) return;
+  await fetch(
+    `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: TELEGRAM_CHAT_ID,
+        text,
+        parse_mode: "HTML",
+      }),
+    }
+  );
+}
 
 /* ─── Simple in-memory rate limiter (5 req/min per IP) ─── */
 const rateMap = new Map<string, number[]>();
@@ -136,6 +156,20 @@ export async function POST(request: NextRequest) {
         <p style="color:#999;font-size:12px;margin-top:16px">Enviado automaticamente por usemoema.com.br</p>
       `,
     });
+
+    await notifyTelegram(
+      `<b>🔔 Novo Lead — use.moema</b>\n\n` +
+        `<b>Nome:</b> ${data.name}\n` +
+        `<b>Email:</b> ${data.email}\n` +
+        `<b>Tel:</b> ${data.phone ?? "—"}\n` +
+        `<b>Fonte:</b> ${data.source}\n` +
+        (data.source === "modal_interesse"
+          ? `<b>Motivação:</b> ${(data.motivation ?? []).join(", ")}\n<b>Orçamento:</b> ${BUDGET_LABELS[data.budget] ?? data.budget}\n`
+          : "") +
+        (data.source === "formulario_contato" && data.message
+          ? `<b>Mensagem:</b> ${data.message}\n`
+          : "")
+    );
   } catch (err) {
     console.error("Resend email error:", err);
   }
