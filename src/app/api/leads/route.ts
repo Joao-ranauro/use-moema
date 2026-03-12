@@ -111,9 +111,9 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // Send email notification (fire-and-forget — don't block the response)
-  resend.emails
-    .send({
+  // Send email notification (awaited — serverless kills unawaited promises)
+  try {
+    await resend.emails.send({
       from: "use.moema Leads <onboarding@resend.dev>",
       to: "joaomendesranauro@gmail.com",
       subject: `Novo lead: ${data.name} — ${data.source === "modal_interesse" ? "Modal Interesse" : "Formulário Contato"}`,
@@ -135,8 +135,10 @@ export async function POST(request: NextRequest) {
         </table>
         <p style="color:#999;font-size:12px;margin-top:16px">Enviado automaticamente por usemoema.com.br</p>
       `,
-    })
-    .catch((err) => console.error("Resend email error:", err));
+    });
+  } catch (err) {
+    console.error("Resend email error:", err);
+  }
 
   return NextResponse.json({ success: true });
 }
