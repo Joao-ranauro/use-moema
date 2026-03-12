@@ -90,11 +90,11 @@ Documento com 30 chunks canônicos. Todas as informações sobre o empreendiment
 ```
 src/
   app/
-    page.tsx          ← ordena as seções: Hero→Location→Manifesto→Residences→Investment→Amenities→Architecture→Contact
+    page.tsx          ← ordena as seções: Hero→Location→Manifesto→Residences→Investment→Amenities (6 seções + InterestModal)
     layout.tsx        ← InterVariable font, SmoothScrollProvider, metadata pt-BR
     globals.css       ← todo o design system (cores, tipografia, efeitos, utilidades)
   components/
-    sections/         ← 8 seções (HeroSection, LocationSection, ManifestoSection, etc.)
+    sections/         ← 8 componentes disponíveis (6 ativas em page.tsx + ArchitectureSection e ContactSection não usadas)
     layout/           ← Header, Footer, MobileMenu
     ui/               ← Button, Counter, GlassCard, RevealText, ParallaxImage
     providers/        ← SmoothScrollProvider (Lenis + GSAP ScrollTrigger sync)
@@ -202,8 +202,10 @@ public/
 | Residences | `ResidencesSection.tsx` | `#residencias` | branco | GSAP clipPath inset reveal (scrub) | `TYPOLOGIES` (local) |
 | Investment | `InvestmentSection.tsx` | `#investimento` | preto | Counter GSAP + stagger price blocks | `PAYMENT_FLOW` (local), `Counter` UI |
 | Amenities | `AmenitiesSection.tsx` | `#amenidades` | branco | GSAP horizontal scroll pin (lg+) | `AMENITIES` |
-| Architecture | `ArchitectureSection.tsx` | — | branco | GSAP clipPath wipe-up stagger | `FEATURES`, `GRID_IMAGES` (local) |
-| Contact | `ContactSection.tsx` | `#contato` | branco + `.noise` | Motion AnimatePresence form→success | `react-hook-form`, `Button` |
+| Architecture | `ArchitectureSection.tsx` | — | branco | GSAP clipPath wipe-up stagger | `FEATURES`, `GRID_IMAGES` (local) | **Não ativa em page.tsx** |
+| Contact | `ContactSection.tsx` | `#contato` | branco + `.noise` | Motion AnimatePresence form→success | `react-hook-form`, `Button` | **Substituída por InterestModal** |
+
+> **Nota**: ContactSection foi substituída pelo InterestModal (modal global acessível via Header e CTAs). ArchitectureSection existe com conteúdo real mas não está renderizada em page.tsx.
 
 ---
 

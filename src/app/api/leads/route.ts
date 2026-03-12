@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Insert into Supabase
-  const { error } = await supabase.from("leads").insert(row);
+  const { error } = await supabase.from("lp_leads").insert(row);
 
   if (error) {
     console.error("Supabase insert error:", error);
