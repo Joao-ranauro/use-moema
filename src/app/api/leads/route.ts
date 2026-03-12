@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Resend } from "resend";
 import { leadSchema } from "@/lib/leads";
 import { supabase } from "@/lib/supabase";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 /* ─── Budget value → readable label ─── */
 const BUDGET_LABELS: Record<string, string> = {
@@ -107,6 +110,33 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
+
+  // Send email notification (fire-and-forget — don't block the response)
+  resend.emails
+    .send({
+      from: "use.moema Leads <onboarding@resend.dev>",
+      to: "joaomendesranauro@gmail.com",
+      subject: `Novo lead: ${data.name} — ${data.source === "modal_interesse" ? "Modal Interesse" : "Formulário Contato"}`,
+      html: `
+        <h2>Novo lead capturado — use.moema</h2>
+        <table style="border-collapse:collapse;font-family:sans-serif">
+          <tr><td style="padding:6px 12px;font-weight:bold">Nome</td><td style="padding:6px 12px">${data.name}</td></tr>
+          <tr><td style="padding:6px 12px;font-weight:bold">Email</td><td style="padding:6px 12px">${data.email}</td></tr>
+          <tr><td style="padding:6px 12px;font-weight:bold">Telefone</td><td style="padding:6px 12px">${data.phone ?? "—"}</td></tr>
+          <tr><td style="padding:6px 12px;font-weight:bold">Fonte</td><td style="padding:6px 12px">${data.source}</td></tr>
+          ${data.source === "modal_interesse" ? `
+          <tr><td style="padding:6px 12px;font-weight:bold">Motivação</td><td style="padding:6px 12px">${(data.motivation ?? []).join(", ")}</td></tr>
+          <tr><td style="padding:6px 12px;font-weight:bold">Orçamento</td><td style="padding:6px 12px">${BUDGET_LABELS[data.budget] ?? data.budget}</td></tr>
+          ` : ""}
+          ${data.source === "formulario_contato" && data.message ? `
+          <tr><td style="padding:6px 12px;font-weight:bold">Mensagem</td><td style="padding:6px 12px">${data.message}</td></tr>
+          ` : ""}
+          ${row.utm_source ? `<tr><td style="padding:6px 12px;font-weight:bold">UTM</td><td style="padding:6px 12px">${row.utm_source} / ${row.utm_medium ?? ""} / ${row.utm_campaign ?? ""}</td></tr>` : ""}
+        </table>
+        <p style="color:#999;font-size:12px;margin-top:16px">Enviado automaticamente por usemoema.com.br</p>
+      `,
+    })
+    .catch((err) => console.error("Resend email error:", err));
 
   return NextResponse.json({ success: true });
 }
