@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { useForm } from "react-hook-form";
 import Image from "next/image";
 import { submitLead } from "@/lib/leads";
+import { event as fbEvent } from "@/lib/facebook-pixel";
 
 /* ─── Types ─── */
 interface InterestModalProps {
@@ -215,7 +216,11 @@ export function InterestModal({ open, onClose }: InterestModalProps) {
     setIsSubmitting(false);
 
     if (result.success) {
-      setSubmitted(true);
+      fbEvent("CompleteRegistration");
+      onClose();
+      setTimeout(() => {
+        window.location.href = "/obrigado";
+      }, 300);
     } else {
       setSubmitError(result.error ?? "Erro ao enviar. Tente novamente.");
     }

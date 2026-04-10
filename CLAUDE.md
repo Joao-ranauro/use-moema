@@ -4,11 +4,14 @@
 - **Framework**: Next.js 16.1.6 + React 19 + TypeScript
 - **CSS**: Tailwind v4 (sem tailwind.config — tudo definido em `src/app/globals.css` via `@theme inline`)
 - **Animações**: GSAP + `@gsap/react` (useGSAP) + Motion (`motion/react`) + Lenis (smooth scroll)
-- **Formulário**: react-hook-form + zod (zod importado mas não wired ainda)
+- **Formulário**: react-hook-form + zod (validação wired no lead schema)
+- **Notificações**: Resend (email) + Telegram Bot (mensagem instantânea a cada lead)
 - **Idioma**: pt-BR
 - **Dev**: `npm run dev` → localhost:3000
 - **Build**: `npm run build`
+- **Deploy**: `npx vercel --prod --yes` (force deploy) ou push para `master` (auto-deploy Vercel)
 - **Screenshot**: `node scripts/screenshot.mjs` → `screenshots/full-page.png` (usa Playwright)
+- **Produção**: https://usemoema.com.br
 
 ---
 
@@ -216,3 +219,42 @@ public/
 - **Fonte**: `src/fonts/InterVariable.woff2` (variable, carregada via next/font/local → `--font-inter`)
 - **Imagens**: todas via URLs Unsplash. `next.config.ts` permite `images.unsplash.com` em remotePatterns
 - **Pastas de imagem** (`public/images/amenities|architecture|neighborhood|residences`): existem mas estão vazias
+
+---
+
+## Pipeline de Leads
+
+**Fluxo completo:** InterestModal (form) → POST `/api/leads` → Supabase `lp_leads` → Email (Resend) → Telegram Bot
+
+### API Route (`src/app/api/leads/route.ts`)
+- Validação com zod (`leadSchema`)
+- Rate limiter in-memory (5 req/min por IP)
+- Captura UTM params do referer
+- Budget labels mapeados: `ate-500k`, `500k-1m`, `1m-1.5m`, `acima-1.5m`
+- Sources: `modal_interesse`, `formulario_contato`
+
+### Variáveis de Ambiente (`.env.local`)
+| Variável | Serviço |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase (evnehcjypsnzranpygek) |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase |
+| `RESEND_API_KEY` | Resend (email) |
+| `TELEGRAM_BOT_TOKEN` | Telegram Bot |
+| `TELEGRAM_CHAT_ID` | Telegram Chat |
+
+### Integrações Verificadas
+- Supabase insert: funcionando
+- Email (Resend): funcionando
+- Telegram notificação: funcionando
+- Instagram: funcionando (verificado 2026-03-12)
+
+---
+
+## Deploy
+
+- **Plataforma**: Vercel
+- **Repo**: `joaoranauro1/use-moema` (branch `master`)
+- **Auto-deploy**: push para `master` → Vercel detecta e deploya
+- **Deploy manual**: `npx vercel --prod --yes` (sem precisar de push)
+- **Domínio**: usemoema.com.br
+- **MCP disponíveis**: GitHub (mcp__github__), Supabase (mcp__plugin_supabase_supabase__) — Vercel MCP não configurado, usar CLI
