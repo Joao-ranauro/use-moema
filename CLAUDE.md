@@ -6,6 +6,7 @@
 - **Animações**: GSAP + `@gsap/react` (useGSAP) + Motion (`motion/react`) + Lenis (smooth scroll)
 - **Formulário**: react-hook-form + zod (validação wired no lead schema)
 - **Notificações**: Resend (email) + Telegram Bot (mensagem instantânea a cada lead)
+- **Tracking**: Vercel Web Analytics (`@vercel/analytics`) + Facebook Pixel (`fbevents.js`)
 - **Idioma**: pt-BR
 - **Dev**: `npm run dev` → localhost:3000
 - **Build**: `npm run build`
@@ -94,8 +95,10 @@ Documento com 30 chunks canônicos. Todas as informações sobre o empreendiment
 src/
   app/
     page.tsx          ← ordena as seções: Hero→Location→Manifesto→Residences→Investment→Amenities (6 seções + InterestModal)
-    layout.tsx        ← InterVariable font, SmoothScrollProvider, metadata pt-BR
+    layout.tsx        ← InterVariable font, SmoothScrollProvider, Facebook Pixel, Vercel Analytics, metadata pt-BR
     globals.css       ← todo o design system (cores, tipografia, efeitos, utilidades)
+    obrigado/
+      page.tsx        ← página pós-lead — dispara fbq("track","Lead") para o Facebook Pixel
   components/
     sections/         ← 8 componentes disponíveis (6 ativas em page.tsx + ArchitectureSection e ContactSection não usadas)
     layout/           ← Header, Footer, MobileMenu
@@ -104,6 +107,7 @@ src/
   lib/
     constants.ts      ← NAV_ITEMS, DISTANCES, AMENITIES, LEGAL_TEXT, ADDRESS
     utils.ts          ← cn() — class name merge
+    facebook-pixel.ts ← helper FB Pixel (FB_PIXEL_ID, pageview(), event())
   fonts/
     InterVariable.woff2
 public/
@@ -241,20 +245,77 @@ public/
 | `RESEND_API_KEY` | Resend (email) |
 | `TELEGRAM_BOT_TOKEN` | Telegram Bot |
 | `TELEGRAM_CHAT_ID` | Telegram Chat |
+| `NEXT_PUBLIC_FACEBOOK_PIXEL_ID` | Facebook Pixel |
 
 ### Integrações Verificadas
 - Supabase insert: funcionando
 - Email (Resend): funcionando
 - Telegram notificação: funcionando
 - Instagram: funcionando (verificado 2026-03-12)
+- Facebook Pixel: funcionando (Pixel ID 1698351161147639, verificado 2026-04-10)
+- Vercel Web Analytics: funcionando (habilitado via API, verificado 2026-04-10)
 
 ---
 
 ## Deploy
 
 - **Plataforma**: Vercel
-- **Repo**: `joaoranauro1/use-moema` (branch `master`)
+- **Repo**: `Joao-ranauro/use-moema` (branch `master`)
+- **Project ID**: `prj_EvEaEAzDPiQ9erBZJY13jXkvdBdr`
 - **Auto-deploy**: push para `master` → Vercel detecta e deploya
-- **Deploy manual**: `npx vercel --prod --yes` (sem precisar de push)
+- **Deploy manual**: `npx vercel --prod --yes` (deploy direto, mais confiável)
 - **Domínio**: usemoema.com.br
+- **Vercel CLI auth**: `$APPDATA/com.vercel.cli/Data/auth.json`
 - **MCP disponíveis**: GitHub (mcp__github__), Supabase (mcp__plugin_supabase_supabase__) — Vercel MCP não configurado, usar CLI
+
+---
+
+## Tracking & Analytics
+
+### Vercel Web Analytics
+- Pacote: `@vercel/analytics` → componente `<Analytics />` em `layout.tsx`
+- Carrega client-side após hidratação (NÃO aparece no HTML inicial — isso é normal)
+- Precisa estar habilitado no dashboard Vercel (aba Analytics) ou via API
+- Verifica status: `GET /v1/projects/{projectId}` → campo `webAnalytics.enabled`
+- Dados visíveis em: dashboard Vercel → Analytics
+
+### Facebook Pixel
+- Helper: `src/lib/facebook-pixel.ts` (exporta `FB_PIXEL_ID`, `pageview()`, `event()`)
+- Script inline no `<head>` de `layout.tsx` (carrega condicionalmente se `FB_PIXEL_ID` existir)
+- Pixel ID via env: `NEXT_PUBLIC_FACEBOOK_PIXEL_ID`
+- Eventos configurados:
+  - `PageView` — dispara em toda página (via script inline no layout)
+  - `Lead` — dispara na página `/obrigado` (via fbq retry loop)
+- Página `/obrigado`: redireciona pós-lead, dispara evento Lead para o Pixel
+
+---
+
+## Regras Operacionais
+
+### Antes de qualquer deploy
+1. Rodar `npm run build` local — verificar se compila sem erro
+2. Conferir que todas as env vars existem na Vercel (`npx vercel env ls`)
+3. Commitar tudo antes de deployar — `git status` limpo
+
+### Deploy
+- **Preferir** `npx vercel --prod --yes` (deploy direto, mais confiável)
+- **Alternativa**: push para `master` (auto-deploy, mas pode conflitar com branches do Vercel)
+- **Cuidado**: Vercel cria branches automáticas para integrações (ex: `vercel/vercel-web-analytics-*`) — ignorar/fechar esses PRs se já fizemos a integração manual
+- **Verificar** deploy: acessar o site + checar build logs no dashboard
+
+### Tracking
+- Vercel Analytics é client-side — não aparece no HTML fonte (normal)
+- Facebook Pixel é inline script — aparece no HTML fonte (verificável via curl/WebFetch)
+- Sempre testar tracking no Chrome DevTools → Network após deploy
+
+### Variáveis de ambiente
+- Env vars locais: `.env.local`
+- Env vars Vercel: `npx vercel env ls` / `npx vercel env add`
+- NUNCA commitar `.env.local` — já está no .gitignore
+- Ao adicionar nova env var: adicionar TANTO no `.env.local` QUANTO na Vercel
+
+### Git
+- Branch principal: `master` (não main)
+- Remote: `origin` → `https://github.com/Joao-ranauro/use-moema.git`
+- Sempre verificar `git status` antes de commitar
+- Commitar por tema (ex: tracking separado de UI)
