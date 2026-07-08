@@ -252,7 +252,7 @@ public/
 - Email (Resend): funcionando
 - Telegram notificação: funcionando
 - Instagram: funcionando (verificado 2026-03-12)
-- Facebook Pixel: funcionando (Pixel ID 1698351161147639, verificado 2026-04-10)
+- Facebook Pixel: funcionando (Pixel ID 1351205769698308, verificado 2026-07-07)
 - Vercel Web Analytics: funcionando (habilitado via API, verificado 2026-04-10)
 
 ---
