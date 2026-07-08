@@ -265,7 +265,8 @@ public/
 - **Project ID**: `prj_EvEaEAzDPiQ9erBZJY13jXkvdBdr`
 - **Auto-deploy**: push para `master` → Vercel detecta e deploya
 - **Deploy manual**: `npx vercel --prod --yes` (deploy direto, mais confiável)
-- **Domínio**: usemoema.com.br
+- **Domínio**: usemoema.com.br (principal) + www.usemoema.com.br (adicionado ao projeto em 2026-07-08;
+  redireciona 308 → apex via `redirects()` no `next.config.ts` — NÃO remover, senão o www vira conteúdo duplicado)
 - **Vercel CLI auth**: `$APPDATA/com.vercel.cli/Data/auth.json`
 - **MCP disponíveis**: GitHub (mcp__github__), Supabase (mcp__plugin_supabase_supabase__) — Vercel MCP não configurado, usar CLI
 
@@ -293,6 +294,11 @@ Fundamentos de SEO todos no ar — ao mexer em metadata/copy, manter estas peça
   precisa crawlear para ver o noindex)
 - **Alt texts descritivos**: fachada e amenities têm alts com contexto (empreendimento + bairro) — manter
   o padrão ao adicionar imagem nova
+- **www.usemoema.com.br**: estava QUEBRADO (DNS apontava p/ Vercel mas domínio não estava no projeto →
+  erro de certificado). Corrigido 2026-07-08: `npx vercel domains add www.usemoema.com.br` + redirect 308
+  no `next.config.ts`. Verificado: www → 308 → apex
+- **Pendente (João)**: cadastrar o site no Google Search Console (grátis — mostra buscas em que o site
+  aparece e acelera indexação do sitemap)
 
 ## Tracking & Analytics
 
