@@ -78,7 +78,7 @@ export function AmenitiesSection({ onInterestClick }: AmenitiesSectionProps) {
             <div className="relative aspect-[3/4] w-full lg:aspect-auto lg:h-full overflow-hidden">
               <Image
                 src={amenity.image}
-                alt={amenity.title}
+                alt={`${amenity.title} do use.moema — ${amenity.description}`}
                 fill
                 className="object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.06]"
                 sizes="(max-width: 1024px) 100vw, 40vw"

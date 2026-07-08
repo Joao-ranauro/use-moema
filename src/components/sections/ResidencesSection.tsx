@@ -88,7 +88,7 @@ export function ResidencesSection() {
         >
           <Image
             src="/images/residences/fachada.webp"
-            alt="Interior residência use.moema"
+            alt="Fachada do use.moema — prédio boutique de studios e compactos na Alameda dos Anapurus, Moema, São Paulo"
             fill
             className="object-cover"
             sizes="(max-width: 1200px) 100vw, 1920px"

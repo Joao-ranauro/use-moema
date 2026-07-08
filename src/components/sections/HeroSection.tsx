@@ -63,7 +63,7 @@ export function HeroSection() {
             visible: { transition: { staggerChildren: 0.2, delayChildren: 0.5 } },
           }}
         >
-          <motion.div
+          <motion.h1
             className="relative h-[3.5rem] w-[280px] md:h-[5rem] md:w-[400px]"
             variants={{
               hidden: { opacity: 0, y: 40 },
@@ -81,7 +81,10 @@ export function HeroSection() {
               className="object-contain object-left"
               priority
             />
-          </motion.div>
+            <span className="sr-only">
+              use.moema — studios e compactos sofisticados em Moema, São Paulo
+            </span>
+          </motion.h1>
 
           <motion.p
             className="mt-6 text-h3 font-light text-white/80"

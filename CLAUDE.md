@@ -221,8 +221,9 @@ public/
 - **Logos**: `public/logos/use-moema-branco.svg` (Hero, Footer, Header transparente) / `use-moema-preto.svg` (Header scrolled)
 - **Vídeo**: `public/videos/hero.webm` (autoplay, muted, loop)
 - **Fonte**: `src/fonts/InterVariable.woff2` (variable, carregada via next/font/local → `--font-inter`)
-- **Imagens**: todas via URLs Unsplash. `next.config.ts` permite `images.unsplash.com` em remotePatterns
-- **Pastas de imagem** (`public/images/amenities|architecture|neighborhood|residences`): existem mas estão vazias
+- **Imagens locais** (webp em `public/images/`): `residences/fachada.webp` (render da fachada), `amenities/*.webp` (6 imagens), `hero-poster.webp`
+- **Unsplash**: só na ArchitectureSection (não ativa em page.tsx). `next.config.ts` permite `images.unsplash.com` em remotePatterns
+- **OG image**: `public/og/og-image.jpg` (1200×630, ~100KB — fachada + logo branca; usada em og:image/twitter:image)
 
 ---
 
@@ -269,6 +270,29 @@ public/
 - **MCP disponíveis**: GitHub (mcp__github__), Supabase (mcp__plugin_supabase_supabase__) — Vercel MCP não configurado, usar CLI
 
 ---
+
+## SEO (implementado 2026-07-08)
+
+Fundamentos de SEO todos no ar — ao mexer em metadata/copy, manter estas peças íntegras:
+
+- **Metadata completa** (`src/app/layout.tsx`): `metadataBase` = `https://usemoema.com.br`, canonical `/`,
+  title com keyword local ("Studios e Compactos Sofisticados em Moema, São Paulo") + template `%s | use.moema`,
+  description com números canônicos do RAG, `robots` (index/follow + googleBot max-image-preview large),
+  openGraph completo (url, siteName, locale pt_BR, images 1200×630) e Twitter card `summary_large_image`
+- **OG image**: `public/og/og-image.jpg` (1200×630, ~100KB) — fachada + gradiente + logo branca. Gerada via
+  Python/PIL a partir de `public/images/residences/fachada.webp` + logo SVG rasterizada (qlmanage). Se a
+  fachada mudar, regenerar
+- **JSON-LD** (`layout.tsx`, const `STRUCTURED_DATA`): `ApartmentComplex` com endereço oficial, 53 unidades,
+  amenities (importadas de `AMENITIES` em constants.ts). SÓ dados canônicos do RAG — nunca inventar
+- **H1**: no Hero (`HeroSection.tsx`) — o contêiner da logo é um `<h1>` com `<span className="sr-only">`
+  keyword-rich. Visual idêntico; NÃO remover o sr-only nem rebaixar para div
+- **`src/app/sitemap.ts`** → `/sitemap.xml` (só a home) e **`src/app/robots.ts`** → `/robots.txt`
+  (allow all, disallow `/api/`, aponta o sitemap)
+- **`/obrigado` é noindex** via `src/app/obrigado/layout.tsx` (metadata robots noindex/nofollow) — página de
+  conversão, não deve rankear. Por isso NÃO entra no sitemap e NÃO é bloqueada no robots.txt (o Google
+  precisa crawlear para ver o noindex)
+- **Alt texts descritivos**: fachada e amenities têm alts com contexto (empreendimento + bairro) — manter
+  o padrão ao adicionar imagem nova
 
 ## Tracking & Analytics
 
