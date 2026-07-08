@@ -50,3 +50,4 @@ public/images/residences/fachada_original.webp
 next-env.d.ts
 
 .vercel
+.env*.local
